@@ -33,7 +33,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="w-full min-h-screen flex flex-col items-center">
+            <div className="flex-1 w-full flex flex-col items-center">
+              {children}
+            </div>
+          </div>
         </ThemeProvider>
       </body>
     </html>
