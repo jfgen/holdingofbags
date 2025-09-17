@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import { UserInfoProvider } from "@/contexts/UserContext";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -33,11 +34,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="w-full min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col items-center">
-              {children}
+          <UserInfoProvider>
+            <div className="w-full min-h-screen flex flex-col items-center">
+              <div className="flex-1 w-full flex flex-col items-center">
+                {children}
+              </div>
             </div>
-          </div>
+          </UserInfoProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserInfo } from "@/contexts/UserContext";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 
@@ -15,6 +16,8 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const supabase = createClient();
+
+  const user = useUserInfo();
 
   useEffect(() => {
     const getParties = async () => {
@@ -38,9 +41,15 @@ export default function Page() {
 
   return (
     <div>
-      <h1 className="text-2xl">Parties</h1>
+      <h1 className="text-3xl mb-4">Parties</h1>
 
       {isLoading && "Loading..."}
+
+      {!isLoading && user && (
+        <p className="mb-6">
+          Welcome {user}, choose the party to manage below, or create a new one!
+        </p>
+      )}
 
       {error && <p className="text-sm text-red-500">{error}</p>}
 
