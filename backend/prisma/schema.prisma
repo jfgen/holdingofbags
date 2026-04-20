@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+}
+
+model User {
+  id            String         @id @default(uuid())
+  username      String         @unique
+  email         String         @unique
+  passwordHash  String
+  createdAt     DateTime       @default(now())
+  foundedGroups Group[]        @relation("Founder")
+  memberships   GroupMember[]
+}
+
+model Group {
+  id        String        @id @default(uuid())
+  name      String
+  founderId String
+  founder   User          @relation("Founder", fields: [founderId], references: [id])
+  createdAt DateTime      @default(now())
+  members   GroupMember[]
+  invites   Invite[]
+  items     Item[]
+  coins     GroupCoins?
+}
+
+model Invite {
+  id        String       @id @default(uuid())
+  groupId   String
+  group     Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  token     String       @unique
+  email     String?
+  status    InviteStatus @default(PENDING)
+  expiresAt DateTime
+  createdAt DateTime     @default(now())
+}
+
+model GroupMember {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId        String
+  group          Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  characterName  String
+  characterEmoji String
+  joinedAt       DateTime @default(now())
+  items          Item[]
+
+  @@unique([userId, groupId])
+}
+
+model Item {
+  id          String       @id @default(uuid())
+  groupId     String
+  group       Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  memberId    String?
+  member      GroupMember? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  name        String
+  description String       @default("")
+  amount      Int          @default(1)
+  value       Decimal      @default(0) @db.Decimal(10, 2)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model GroupCoins {
+  id       String @id @default(uuid())
+  groupId  String @unique
+  group    Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  platinum Int    @default(0)
+  electrum Int    @default(0)
+  gold     Int    @default(0)
+  silver   Int    @default(0)
+  copper   Int    @default(0)
+}
