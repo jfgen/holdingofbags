@@ -1837,8 +1837,11 @@ export default defineConfig({
 {
   "compilerOptions": {
     "composite": true,
+    "target": "ES2022",
+    "lib": ["ES2022"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "skipLibCheck": true,
     "strict": true
   },
   "include": ["vite.config.ts"]
