@@ -3,7 +3,7 @@
 ## Setup
 
 ```bash
-cp .env.example .env
+cp backend/.env.example backend/.env
 npm install
 npm run db:up
 npm --workspace backend run prisma:migrate
