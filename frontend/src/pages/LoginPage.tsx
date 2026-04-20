@@ -4,6 +4,7 @@ import { authApi } from "../api/auth";
 import { useAuth } from "../lib/auth";
 import { ApiError } from "../api/client";
 import { FormCard } from "../components/ui/FormCard";
+import { PageShell } from "../components/ui/PageShell";
 import { TextField } from "../components/ui/TextField";
 import { Button } from "../components/ui/Button";
 import { ErrorText } from "../components/ui/ErrorText";
@@ -32,14 +33,16 @@ export default function LoginPage() {
   }
 
   return (
-    <FormCard title="Sign in" onSubmit={onSubmit}>
-      <TextField label="Email" type="email" required value={email} onChange={setEmail} />
-      <TextField label="Password" type="password" required value={password} onChange={setPassword} />
-      <ErrorText>{error}</ErrorText>
-      <Button fullWidth busy={busy} busyLabel="Signing in…">Sign in</Button>
-      <p className="text-sm text-subtext">
-        No account? <Link to="/register" className="text-blue hover:underline">Register</Link>
-      </p>
-    </FormCard>
+    <PageShell>
+      <FormCard title="Sign in" onSubmit={onSubmit}>
+        <TextField label="Email" type="email" required value={email} onChange={setEmail} />
+        <TextField label="Password" type="password" required value={password} onChange={setPassword} />
+        <ErrorText>{error}</ErrorText>
+        <Button fullWidth busy={busy} busyLabel="Signing in…">Sign in</Button>
+        <p className="text-sm text-subtext">
+          No account? <Link to="/register" className="text-blue hover:underline">Register</Link>
+        </p>
+      </FormCard>
+    </PageShell>
   );
 }

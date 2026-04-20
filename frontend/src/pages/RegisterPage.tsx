@@ -4,6 +4,7 @@ import { authApi } from "../api/auth";
 import { useAuth } from "../lib/auth";
 import { ApiError } from "../api/client";
 import { FormCard } from "../components/ui/FormCard";
+import { PageShell } from "../components/ui/PageShell";
 import { TextField } from "../components/ui/TextField";
 import { Button } from "../components/ui/Button";
 import { ErrorText } from "../components/ui/ErrorText";
@@ -32,15 +33,17 @@ export default function RegisterPage() {
   }
 
   return (
-    <FormCard title="Create account" onSubmit={onSubmit}>
-      <TextField label="Username" required minLength={2} value={username} onChange={setUsername} />
-      <TextField label="Email" type="email" required value={email} onChange={setEmail} />
-      <TextField label="Password" type="password" required minLength={8} value={password} onChange={setPassword} />
-      <ErrorText>{error}</ErrorText>
-      <Button fullWidth busy={busy} busyLabel="Creating…">Create account</Button>
-      <p className="text-sm text-subtext">
-        Already have one? <Link to="/login" className="text-blue hover:underline">Sign in</Link>
-      </p>
-    </FormCard>
+    <PageShell>
+      <FormCard title="Create account" onSubmit={onSubmit}>
+        <TextField label="Username" required minLength={2} value={username} onChange={setUsername} />
+        <TextField label="Email" type="email" required value={email} onChange={setEmail} />
+        <TextField label="Password" type="password" required minLength={8} value={password} onChange={setPassword} />
+        <ErrorText>{error}</ErrorText>
+        <Button fullWidth busy={busy} busyLabel="Creating…">Create account</Button>
+        <p className="text-sm text-subtext">
+          Already have one? <Link to="/login" className="text-blue hover:underline">Sign in</Link>
+        </p>
+      </FormCard>
+    </PageShell>
   );
 }

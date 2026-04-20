@@ -7,6 +7,7 @@ import { ApiError } from "../api/client";
 import { EmojiPicker } from "../components/EmojiPicker";
 import { CHARACTER_EMOJIS } from "../lib/emojis";
 import { FormCard } from "../components/ui/FormCard";
+import { PageShell } from "../components/ui/PageShell";
 import { TextField } from "../components/ui/TextField";
 import { Button } from "../components/ui/Button";
 import { ErrorText } from "../components/ui/ErrorText";
@@ -68,20 +69,22 @@ export default function RegisterInvitePage() {
     : "Create an account and your character.";
 
   return (
-    <FormCard title={`Join ${groupName || "group"}`} subtitle={subtitle} onSubmit={onSubmit} width="lg">
-      {!user && (
-        <>
-          <TextField label="Username" required minLength={2} value={username} onChange={setUsername} />
-          <TextField label="Email" type="email" required value={email} onChange={setEmail} />
-          <TextField label="Password" type="password" required minLength={8} value={password} onChange={setPassword} />
-        </>
-      )}
-      <TextField label="Character name" required value={characterName} onChange={setCharacterName} />
-      <EmojiPicker value={characterEmoji} onChange={setCharacterEmoji} />
-      <ErrorText>{error}</ErrorText>
-      <Button fullWidth busy={busy} busyLabel="Joining…">
-        {user ? "Join group" : "Create account and join"}
-      </Button>
-    </FormCard>
+    <PageShell>
+      <FormCard title={`Join ${groupName || "group"}`} subtitle={subtitle} onSubmit={onSubmit} width="lg">
+        {!user && (
+          <>
+            <TextField label="Username" required minLength={2} value={username} onChange={setUsername} />
+            <TextField label="Email" type="email" required value={email} onChange={setEmail} />
+            <TextField label="Password" type="password" required minLength={8} value={password} onChange={setPassword} />
+          </>
+        )}
+        <TextField label="Character name" required value={characterName} onChange={setCharacterName} />
+        <EmojiPicker value={characterEmoji} onChange={setCharacterEmoji} />
+        <ErrorText>{error}</ErrorText>
+        <Button fullWidth busy={busy} busyLabel="Joining…">
+          {user ? "Join group" : "Create account and join"}
+        </Button>
+      </FormCard>
+    </PageShell>
   );
 }
