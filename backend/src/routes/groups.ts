@@ -1,4 +1,5 @@
 import { Router } from "express";
+import crypto from "node:crypto";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { requireAuth } from "../middleware/auth";
@@ -55,6 +56,24 @@ groupsRouter.get("/:groupId", requireMembership, async (req, res, next) => {
     });
     if (!group) throw new HttpError(404, "group not found");
     res.json({ group });
+  } catch (e) {
+    next(e);
+  }
+});
+
+groupsRouter.post("/:groupId/invites", requireMembership, async (req, res, next) => {
+  try {
+    const group = await prisma.group.findUnique({ where: { id: req.params.groupId } });
+    if (!group) throw new HttpError(404, "group not found");
+    if (group.founderId !== req.userId) throw new HttpError(403, "only the founder can invite");
+    const invite = await prisma.invite.create({
+      data: {
+        groupId: group.id,
+        token: crypto.randomBytes(24).toString("base64url"),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      },
+    });
+    res.status(201).json({ invite });
   } catch (e) {
     next(e);
   }
