@@ -97,3 +97,45 @@ itemsRouter.delete<ItemParams>("/:itemId", async (req, res, next) => {
     next(e);
   }
 });
+
+const moveSchema = z.object({
+  quantity: z.number().int().min(1),
+  destinationMemberId: z.string().uuid().nullable(),
+});
+
+itemsRouter.post<ItemParams>("/:itemId/move", async (req, res, next) => {
+  try {
+    const source = await loadItem(req.params.groupId, req.params.itemId);
+    const body = moveSchema.parse(req.body);
+    if (body.quantity > source.amount) throw new HttpError(400, "quantity exceeds stack size");
+    if (body.destinationMemberId) {
+      const dest = await prisma.groupMember.findUnique({ where: { id: body.destinationMemberId } });
+      if (!dest || dest.groupId !== req.params.groupId) throw new HttpError(400, "invalid destinationMemberId");
+    }
+    if ((body.destinationMemberId ?? null) === (source.memberId ?? null)) {
+      throw new HttpError(400, "source and destination are the same");
+    }
+
+    const created = await prisma.$transaction(async (tx) => {
+      if (body.quantity === source.amount) {
+        await tx.item.delete({ where: { id: source.id } });
+      } else {
+        await tx.item.update({ where: { id: source.id }, data: { amount: source.amount - body.quantity } });
+      }
+      return tx.item.create({
+        data: {
+          groupId: source.groupId,
+          memberId: body.destinationMemberId,
+          name: source.name,
+          description: source.description,
+          amount: body.quantity,
+          value: source.value,
+        },
+      });
+    });
+    res.json({ item: created });
+  } catch (e) {
+    if (e instanceof z.ZodError) return next(new HttpError(400, e.issues[0].message));
+    next(e);
+  }
+});

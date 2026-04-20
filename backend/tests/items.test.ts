@@ -57,3 +57,63 @@ describe("items CRUD", () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe("POST /items/:itemId/move", () => {
+  it("partial stack: decrements source, creates new at destination", async () => {
+    const a = await makeUser();
+    const { group, member } = await makeGroup(a.user.id);
+    const source = await prisma.item.create({ data: { groupId: group.id, name: "Arrows", amount: 20 } });
+    const res = await request(app).post(`/api/groups/${group.id}/items/${source.id}/move`).set(authHeader(a.token)).send({
+      quantity: 7, destinationMemberId: member.id,
+    });
+    expect(res.status).toBe(200);
+    const remaining = await prisma.item.findUnique({ where: { id: source.id } });
+    expect(remaining?.amount).toBe(13);
+    expect(res.body.item.memberId).toBe(member.id);
+    expect(res.body.item.amount).toBe(7);
+  });
+
+  it("full stack: deletes source, creates destination", async () => {
+    const a = await makeUser();
+    const { group, member } = await makeGroup(a.user.id);
+    const source = await prisma.item.create({ data: { groupId: group.id, name: "Shield", amount: 1 } });
+    const res = await request(app).post(`/api/groups/${group.id}/items/${source.id}/move`).set(authHeader(a.token)).send({
+      quantity: 1, destinationMemberId: member.id,
+    });
+    expect(res.status).toBe(200);
+    expect(await prisma.item.findUnique({ where: { id: source.id } })).toBeNull();
+    expect(res.body.item.memberId).toBe(member.id);
+  });
+
+  it("character → hoard with destinationMemberId null", async () => {
+    const a = await makeUser();
+    const { group, member } = await makeGroup(a.user.id);
+    const source = await prisma.item.create({ data: { groupId: group.id, memberId: member.id, name: "Map", amount: 1 } });
+    const res = await request(app).post(`/api/groups/${group.id}/items/${source.id}/move`).set(authHeader(a.token)).send({
+      quantity: 1, destinationMemberId: null,
+    });
+    expect(res.status).toBe(200);
+    expect(res.body.item.memberId).toBeNull();
+  });
+
+  it("rejects quantity > amount", async () => {
+    const a = await makeUser();
+    const { group, member } = await makeGroup(a.user.id);
+    const source = await prisma.item.create({ data: { groupId: group.id, name: "X", amount: 2 } });
+    const res = await request(app).post(`/api/groups/${group.id}/items/${source.id}/move`).set(authHeader(a.token)).send({
+      quantity: 5, destinationMemberId: member.id,
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects destinationMemberId from another group", async () => {
+    const a = await makeUser();
+    const { group } = await makeGroup(a.user.id);
+    const other = await makeGroup((await makeUser()).user.id);
+    const src = await prisma.item.create({ data: { groupId: group.id, name: "X", amount: 1 } });
+    const res = await request(app).post(`/api/groups/${group.id}/items/${src.id}/move`).set(authHeader(a.token)).send({
+      quantity: 1, destinationMemberId: other.member.id,
+    });
+    expect(res.status).toBe(400);
+  });
+});
