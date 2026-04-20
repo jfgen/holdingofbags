@@ -27,7 +27,7 @@ export function authHeader(token: string) {
   return { Authorization: `Bearer ${token}` };
 }
 
-export async function post(app: Express, path: string, body: unknown, token?: string) {
+export async function post(app: Express, path: string, body: object, token?: string) {
   const req = request(app).post(path).send(body);
   return token ? req.set(authHeader(token)) : req;
 }

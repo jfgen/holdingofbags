@@ -521,7 +521,7 @@ export function authHeader(token: string) {
   return { Authorization: `Bearer ${token}` };
 }
 
-export async function post(app: Express, path: string, body: unknown, token?: string) {
+export async function post(app: Express, path: string, body: object, token?: string) {
   const req = request(app).post(path).send(body);
   return token ? req.set(authHeader(token)) : req;
 }
@@ -733,13 +733,13 @@ describe("POST /api/auth/register", () => {
   });
 
   it("rejects duplicate email", async () => {
-    await request(app).post("/api/auth/register").send({ username: "a", email: "x@y.z", password: "pw12345678" });
-    const res = await request(app).post("/api/auth/register").send({ username: "b", email: "x@y.z", password: "pw12345678" });
+    await request(app).post("/api/auth/register").send({ username: "alpha", email: "dup@test.local", password: "pw12345678" });
+    const res = await request(app).post("/api/auth/register").send({ username: "beta", email: "dup@test.local", password: "pw12345678" });
     expect(res.status).toBe(409);
   });
 
   it("rejects short password", async () => {
-    const res = await request(app).post("/api/auth/register").send({ username: "c", email: "c@c.c", password: "123" });
+    const res = await request(app).post("/api/auth/register").send({ username: "carla", email: "c@test.local", password: "123" });
     expect(res.status).toBe(400);
   });
 });
