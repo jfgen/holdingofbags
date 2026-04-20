@@ -4,6 +4,7 @@ import { authRouter } from "./routes/auth";
 import { groupsRouter } from "./routes/groups";
 import { invitesRouter } from "./routes/invites";
 import { itemsRouter } from "./routes/items";
+import { coinsRouter } from "./routes/coins";
 import { errorHandler } from "./middleware/error";
 
 export function createApp(): Express {
@@ -14,6 +15,7 @@ export function createApp(): Express {
   app.use("/api/auth", authRouter);
   app.use("/api/groups", groupsRouter);
   app.use("/api/groups/:groupId/items", itemsRouter);
+  app.use("/api/groups/:groupId/coins", coinsRouter);
   app.use("/api/invites", invitesRouter);
   app.use(errorHandler);
   return app;
