@@ -31,6 +31,21 @@ describe("GET /api/invites/:token", () => {
   });
 });
 
+describe("POST /api/invites/:token/join (logged in)", () => {
+  it("creates a member for the authenticated user", async () => {
+    const founder = await makeUser();
+    const { group } = await makeGroup(founder.user.id);
+    const invite = await request(app).post(`/api/groups/${group.id}/invites`).set(authHeader(founder.token)).send({});
+    const joiner = await makeUser();
+    const res = await request(app).post(`/api/invites/${invite.body.invite.token}/join`).set(authHeader(joiner.token)).send({
+      characterName: "Sam", characterEmoji: "🌿",
+    });
+    expect(res.status).toBe(201);
+    expect(res.body.member.characterName).toBe("Sam");
+    expect(res.body.groupId).toBe(group.id);
+  });
+});
+
 describe("POST /api/auth/register/invite", () => {
   it("creates user + member + marks invite ACCEPTED", async () => {
     const a = await makeUser();
