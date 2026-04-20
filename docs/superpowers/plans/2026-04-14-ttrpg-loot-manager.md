@@ -451,7 +451,7 @@ const config: Config = {
   preset: "ts-jest",
   testEnvironment: "node",
   testMatch: ["<rootDir>/tests/**/*.test.ts"],
-  setupFilesAfterEach: ["<rootDir>/tests/setup.ts"],
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.ts"],
   globalSetup: "<rootDir>/tests/globalSetup.ts",
   testTimeout: 15000,
 };
