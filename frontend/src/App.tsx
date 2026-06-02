@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import RegisterInvitePage from "./pages/RegisterInvitePage";
 import GroupsPage from "./pages/GroupsPage";
 import GroupPage from "./pages/GroupPage";
+import LandingPage from "./pages/LandingPage";
 import { RequireAuth } from "./components/RequireAuth";
 
 function RegisterRoute() {
@@ -17,6 +18,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterRoute />} />
           <Route path="/groups" element={<RequireAuth><GroupsPage /></RequireAuth>} />
