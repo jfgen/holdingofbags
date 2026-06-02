@@ -113,12 +113,72 @@ function Features() {
   );
 }
 
+const TESTIMONIALS = [
+  {
+    quote:
+      "We used to have a spreadsheet, a shared note, and someone's memory all disagreeing with each other. Now everything's in one place and we actually argue about tactics instead of who has the healing potion.",
+    avatar: "🧙",
+    name: "Marieke V.",
+    role: "DM · D&D 5e",
+  },
+  {
+    quote:
+      "Our DM set this up five minutes before the session started, sent us a link, and we were all in before the first roll. I don't think I've ever onboarded to anything that fast. We've used it every session since.",
+    avatar: "🐉",
+    name: "Tomás R.",
+    role: "Player · Pathfinder 2e",
+  },
+  {
+    quote:
+      "The board view is a game changer. I can see every character's inventory at once without interrupting anyone. We used to lose 10 minutes every session just figuring out who was carrying what. That's gone now.",
+    avatar: "⚔️",
+    name: "Priya S.",
+    role: "Player · Shadowdark",
+  },
+];
+
+function Testimonials() {
+  return (
+    <section className="border-t border-surface0 bg-crust py-16">
+      <div className="max-w-[1200px] mx-auto px-12">
+      <div className="text-center mb-10">
+        <h2 className="text-[22px] font-bold text-text mb-2">Loved by parties everywhere</h2>
+        <p className="text-sm text-overlay0">Real players, less time on admin, more time rolling dice</p>
+      </div>
+      <div className="grid grid-cols-3 gap-5">
+        {TESTIMONIALS.map((t) => (
+          <div key={t.name} className="bg-base border border-surface0 rounded-xl p-7 flex flex-col gap-5">
+            <blockquote className="text-sm text-subtext leading-relaxed relative pt-1">
+              <span className="absolute -top-2.5 -left-1 text-5xl leading-none text-surface0 font-serif select-none">
+                "
+              </span>
+              {t.quote}
+            </blockquote>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface0 flex items-center justify-center text-lg flex-shrink-0">
+                {t.avatar}
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-sm font-bold text-text">{t.name}</span>
+                <span className="text-xs text-overlay0">{t.role}</span>
+              </div>
+              <span className="ml-auto text-yellow text-xs tracking-wide">★★★★★</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      </div>
+    </section>
+  );
+}
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-mantle text-text">
       <Nav />
       <Hero />
       <Features />
+      <Testimonials />
     </div>
   );
 }
