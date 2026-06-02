@@ -68,11 +68,57 @@ function Hero() {
   );
 }
 
+const FEATURES = [
+  {
+    icon: "☁️",
+    title: "Cloud-based & always accessible",
+    body: "Your loot lives in the cloud. Open it on your phone, laptop, or tablet — mid-session or between sessions. If you have a browser, you have your hoard.",
+  },
+  {
+    icon: "⚡",
+    title: "Up and running in minutes",
+    body: "Create a group, share the invite link, and your whole party is in. No downloads, no configuration. Just send the link and roll.",
+  },
+  {
+    icon: "🎒",
+    title: "Shared hoard, per-character inventory",
+    body: "Add items to the party hoard, then assign them to individual characters. Split stacks, move between players, or keep it communal — your call.",
+  },
+  {
+    icon: "👁️",
+    title: "Everything at a glance",
+    body: "Board view shows each character's items side by side. List view gives you a flat table to search and sort. Coin pool always visible. Nothing buried.",
+  },
+];
+
+function Features() {
+  return (
+    <section className="border-t border-surface0 py-16">
+      <div className="max-w-[1200px] mx-auto px-12">
+      <div className="text-center mb-10">
+        <h2 className="text-[22px] font-bold text-text mb-2">Everything your party needs</h2>
+        <p className="text-sm text-overlay0">Built for the table, designed to get out of the way</p>
+      </div>
+      <div className="grid grid-cols-4 gap-5">
+        {FEATURES.map((f) => (
+          <div key={f.title} className="bg-mantle border border-surface0 rounded-xl p-6">
+            <div className="text-2xl mb-3">{f.icon}</div>
+            <h3 className="text-sm font-bold text-text mb-2">{f.title}</h3>
+            <p className="text-xs text-subtext leading-relaxed">{f.body}</p>
+          </div>
+        ))}
+      </div>
+      </div>
+    </section>
+  );
+}
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-mantle text-text">
       <Nav />
       <Hero />
+      <Features />
     </div>
   );
 }
