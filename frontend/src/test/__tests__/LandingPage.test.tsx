@@ -1,12 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { AuthProvider } from "../../lib/auth";
 import LandingPage from "../../pages/LandingPage";
 
 function renderPage() {
   return render(
-    <MemoryRouter>
-      <LandingPage />
-    </MemoryRouter>
+    <AuthProvider>
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    </AuthProvider>
   );
 }
 
@@ -76,7 +79,8 @@ describe("LandingPage", () => {
 
   it("pricing CTAs link to /register", () => {
     renderPage();
-    expect(screen.getByRole("link", { name: /get started free/i })).toHaveAttribute("href", "/register");
+    const getStartedLinks = screen.getAllByRole("link", { name: /get started free/i });
+    expect(getStartedLinks[getStartedLinks.length - 1]).toHaveAttribute("href", "/register");
     expect(screen.getByRole("link", { name: /upgrade to proficient/i })).toHaveAttribute("href", "/register");
   });
 
