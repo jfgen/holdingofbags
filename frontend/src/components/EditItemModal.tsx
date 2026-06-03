@@ -5,14 +5,16 @@ import { ApiError } from "../api/client";
 import { Modal } from "./ui/Modal";
 import { ItemForm, type ItemFormValues } from "./ItemForm";
 
-export function AddItemForm({
+export function EditItemModal({
+  item,
   groupId,
+  onSaved,
   onClose,
-  onAdded,
 }: {
+  item: Item;
   groupId: string;
+  onSaved: () => void;
   onClose: () => void;
-  onAdded: (item: Item) => void;
 }) {
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -21,14 +23,13 @@ export function AddItemForm({
     setBusy(true);
     setErr(null);
     try {
-      const r = await itemsApi.create(groupId, {
+      await itemsApi.update(groupId, item.id, {
         name: values.name,
         description: values.description,
-        amount: Number(values.amount),
+        amount: parseInt(values.amount, 10),
         value: values.value,
       });
-      onAdded(r.item);
-      onClose();
+      onSaved();
     } catch (e) {
       setErr(e instanceof ApiError ? e.message : "failed");
     } finally {
@@ -37,13 +38,18 @@ export function AddItemForm({
   }
 
   return (
-    <Modal ariaLabel="Add item" onClose={onClose}>
+    <Modal ariaLabel={`Edit ${item.name}`} onClose={onClose}>
       <ItemForm
-        title="Add item to hoard"
+        title={`Edit ${item.name}`}
+        initialValues={{
+          name: item.name,
+          description: item.description,
+          amount: String(item.amount),
+          value: item.value,
+        }}
         onSubmit={handleSubmit}
         onCancel={onClose}
-        submitLabel="Add"
-        busyLabel="Adding…"
+        submitLabel="Save Changes"
         busy={busy}
         error={err}
       />

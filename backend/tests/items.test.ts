@@ -48,6 +48,18 @@ describe("items CRUD", () => {
     expect(await prisma.item.count()).toBe(0);
   });
 
+  it("PATCH allows amount of 0", async () => {
+    const a = await makeUser();
+    const { group } = await makeGroup(a.user.id);
+    const item = await prisma.item.create({ data: { groupId: group.id, name: "Used Potion", amount: 1 } });
+    const res = await request(app)
+      .patch(`/api/groups/${group.id}/items/${item.id}`)
+      .set(authHeader(a.token))
+      .send({ amount: 0 });
+    expect(res.status).toBe(200);
+    expect(res.body.item.amount).toBe(0);
+  });
+
   it("404s on item from another group", async () => {
     const a = await makeUser();
     const { group } = await makeGroup(a.user.id);

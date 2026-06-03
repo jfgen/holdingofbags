@@ -3,6 +3,7 @@ import type { Item, Member } from "../types";
 function Column({
   title,
   items,
+  onEdit,
   onMove,
   onDelete,
   dimNonMatching,
@@ -10,6 +11,7 @@ function Column({
 }: {
   title: string;
   items: Item[];
+  onEdit: (item: Item) => void;
   onMove: (item: Item) => void;
   onDelete: (item: Item) => void;
   dimNonMatching: boolean;
@@ -31,8 +33,13 @@ function Column({
           return (
             <li
               key={it.id}
-              className={`bg-base border rounded-md p-2 ${
-                dimmed ? "opacity-30 border-surface1" : highlighted ? "border-blue" : "border-surface1"
+              onClick={() => onEdit(it)}
+              className={`bg-base border rounded-md p-2 cursor-pointer transition-colors duration-150 ${
+                dimmed
+                  ? "opacity-30 border-surface1"
+                  : highlighted
+                  ? "border-blue"
+                  : "border-surface1 hover:border-mauve"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -43,8 +50,18 @@ function Column({
                 <div className="text-xs text-subtext mt-1">{it.description}</div>
               )}
               <div className="mt-2 flex gap-3 text-xs">
-                <button onClick={() => onMove(it)} className="text-blue hover:underline">Move</button>
-                <button onClick={() => onDelete(it)} className="text-red hover:underline">Delete</button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onMove(it); }}
+                  className="text-blue hover:underline"
+                >
+                  Move
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onDelete(it); }}
+                  className="text-red hover:underline"
+                >
+                  Delete
+                </button>
               </div>
             </li>
           );
@@ -58,12 +75,14 @@ export function BoardView({
   items,
   members,
   search,
+  onEdit,
   onMove,
   onDelete,
 }: {
   items: Item[];
   members: Member[];
   search: string;
+  onEdit: (item: Item) => void;
   onMove: (item: Item) => void;
   onDelete: (item: Item) => void;
 }) {
@@ -78,6 +97,7 @@ export function BoardView({
       <Column
         title="🏰 Hoard"
         items={hoard}
+        onEdit={onEdit}
         onMove={onMove}
         onDelete={onDelete}
         dimNonMatching={!!q}
@@ -88,6 +108,7 @@ export function BoardView({
           key={m.id}
           title={`${m.characterEmoji} ${m.characterName}`}
           items={items.filter((i) => i.memberId === m.id)}
+          onEdit={onEdit}
           onMove={onMove}
           onDelete={onDelete}
           dimNonMatching={!!q}

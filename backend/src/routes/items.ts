@@ -22,7 +22,7 @@ const createSchema = z.object({
 const updateSchema = z.object({
   name: z.string().min(1).max(128).optional(),
   description: z.string().max(1024).optional(),
-  amount: z.number().int().min(1).optional(),
+  amount: z.number().int().min(0).optional(),
   value: z.union([z.string(), z.number()]).optional(),
 });
 
