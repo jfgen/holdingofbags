@@ -10,6 +10,7 @@ import { BoardView } from "../components/BoardView";
 import { ListView } from "../components/ListView";
 import { AddItemForm } from "../components/AddItemForm";
 import { MoveItemModal } from "../components/MoveItemModal";
+import { EditItemModal } from "../components/EditItemModal";
 import { InviteButton } from "../components/InviteButton";
 import { Button } from "../components/ui/Button";
 
@@ -25,6 +26,7 @@ export default function GroupPage() {
   const [search, setSearch] = useState("");
   const [adding, setAdding] = useState(false);
   const [moving, setMoving] = useState<Item | null>(null);
+  const [editing, setEditing] = useState<Item | null>(null);
 
   async function refresh() {
     if (!groupId) return;
@@ -119,9 +121,9 @@ export default function GroupPage() {
       </div>
 
       {view === "board" ? (
-        <BoardView items={items} members={group.members} search={search} onMove={setMoving} onDelete={doDelete} />
+        <BoardView items={items} members={group.members} search={search} onEdit={setEditing} onMove={setMoving} onDelete={doDelete} />
       ) : (
-        <ListView items={filtered} members={group.members} onMove={setMoving} onDelete={doDelete} />
+        <ListView items={filtered} members={group.members} onEdit={setEditing} onMove={setMoving} onDelete={doDelete} />
       )}
 
       {adding && (
@@ -133,6 +135,14 @@ export default function GroupPage() {
           members={group.members}
           onClose={() => setMoving(null)}
           onMove={(q, dest) => doMove(moving.id, q, dest)}
+        />
+      )}
+      {editing && (
+        <EditItemModal
+          item={editing}
+          groupId={group.id}
+          onSaved={async () => { await refresh(); setEditing(null); }}
+          onClose={() => setEditing(null)}
         />
       )}
     </div>
