@@ -43,6 +43,7 @@ export function AddItemForm({
         onSubmit={handleSubmit}
         onCancel={onClose}
         submitLabel="Add"
+        busyLabel="Adding…"
         busy={busy}
         error={err}
       />

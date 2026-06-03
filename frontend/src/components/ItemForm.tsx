@@ -17,6 +17,7 @@ export function ItemForm({
   onCancel,
   submitLabel,
   busy = false,
+  busyLabel = "Saving…",
   error,
 }: {
   title: string;
@@ -25,6 +26,7 @@ export function ItemForm({
   onCancel: () => void;
   submitLabel: string;
   busy?: boolean;
+  busyLabel?: string;
   error?: string | null;
 }) {
   const [name, setName] = useState(initialValues?.name ?? "");
@@ -79,7 +81,7 @@ export function ItemForm({
       {error && <ErrorText>{error}</ErrorText>}
       <div className="flex justify-end gap-2">
         <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
-        <Button busy={busy} busyLabel="Saving…">{submitLabel}</Button>
+        <Button busy={busy} busyLabel={busyLabel}>{submitLabel}</Button>
       </div>
     </form>
   );
