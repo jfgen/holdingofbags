@@ -53,6 +53,15 @@ describe("ItemForm", () => {
     expect(screen.getByText(/whole number/i)).toBeInTheDocument();
   });
 
+  it("shows error and does not call onSubmit when amount is a decimal", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+    render(<ItemForm title="Test" initialValues={{ ...defaults, amount: "1.5" }} onSubmit={onSubmit} onCancel={() => {}} submitLabel="Save" />);
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByText(/whole number/i)).toBeInTheDocument();
+  });
+
   it("calls onCancel when cancel is clicked", async () => {
     const user = userEvent.setup();
     const onCancel = vi.fn();
