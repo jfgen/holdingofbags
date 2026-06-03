@@ -2,24 +2,26 @@ import { Link } from "react-router-dom";
 
 function Nav() {
   return (
-    <nav className="flex items-center justify-between px-12 py-3.5 border-b border-surface0 bg-base">
-      <div className="flex items-center gap-2 font-bold text-[15px] text-text">
-        <span>⚔️</span>
-        <span>Holding of Bags</span>
-      </div>
-      <div className="flex items-center gap-2.5">
-        <Link
-          to="/login"
-          className="border border-surface1 text-text font-semibold rounded-md px-3.5 py-1.5 text-sm hover:border-mauve hover:text-mauve transition-colors duration-200"
-        >
-          Sign In
-        </Link>
-        <Link
-          to="/register"
-          className="bg-mauve text-crust font-semibold rounded-md px-3.5 py-1.5 text-sm hover:brightness-90 transition-all duration-200"
-        >
-          Get Started Free
-        </Link>
+    <nav className="border-b border-surface0 bg-base">
+      <div className="max-w-[1200px] mx-auto px-12 py-3.5 flex items-center justify-between">
+        <div className="flex items-center gap-2 font-bold text-[15px] text-text">
+          <img src="/holdingofbags.png" alt="Holding of Bags logo" className="h-8 w-auto" />
+          <span>Holding of Bags</span>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <Link
+            to="/login"
+            className="border border-surface1 text-text font-semibold rounded-md px-3.5 py-1.5 text-sm hover:border-mauve hover:text-mauve transition-colors duration-200"
+          >
+            Sign In
+          </Link>
+          <Link
+            to="/register"
+            className="bg-mauve text-crust font-semibold rounded-md px-3.5 py-1.5 text-sm hover:brightness-90 transition-all duration-200"
+          >
+            Get Started Free
+          </Link>
+        </div>
       </div>
     </nav>
   );
@@ -44,7 +46,7 @@ function Hero() {
         <div className="flex items-center gap-3">
           <Link
             to="/register"
-            className="bg-mauve text-crust font-bold rounded-lg px-6 py-2.5 text-sm hover:brightness-90 hover:-translate-y-px transition-all duration-200"
+            className="bg-mauve text-crust font-bold rounded-lg px-6 py-2.5 text-sm hover:brightness-90 transition-all duration-200"
           >
             Create Your Group →
           </Link>
@@ -58,7 +60,7 @@ function Hero() {
       </div>
       <div className="relative overflow-hidden">
         <img
-          src="/hero.jpg"
+          src="/naviu_heroes.png"
           alt="People playing tabletop RPG around a table"
           className="w-full h-full object-cover"
         />
@@ -256,7 +258,7 @@ function Pricing() {
           </ul>
           <Link
             to="/register"
-            className="mt-6 block w-full text-center bg-mauve text-crust font-bold rounded-lg py-2.5 text-sm hover:brightness-90 hover:-translate-y-px transition-all duration-200"
+            className="mt-6 block w-full text-center bg-mauve text-crust font-bold rounded-lg py-2.5 text-sm hover:brightness-90 transition-all duration-200"
           >
             Upgrade to Proficient →
           </Link>
