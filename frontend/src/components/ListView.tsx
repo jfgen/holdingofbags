@@ -12,11 +12,13 @@ function locationLabel(item: Item, members: Member[]) {
 export function ListView({
   items,
   members,
+  onEdit,
   onMove,
   onDelete,
 }: {
   items: Item[];
   members: Member[];
+  onEdit: (item: Item) => void;
   onMove: (item: Item) => void;
   onDelete: (item: Item) => void;
 }) {
@@ -69,6 +71,7 @@ export function ListView({
               <td className="p-2">{it.value}</td>
               <td className="p-2">{locationLabel(it, members)}</td>
               <td className="p-2 text-right">
+                <button onClick={() => onEdit(it)} className="text-mauve hover:underline mr-3">Edit</button>
                 <button onClick={() => onMove(it)} className="text-blue hover:underline mr-3">Move</button>
                 <button onClick={() => onDelete(it)} className="text-red hover:underline">Delete</button>
               </td>
