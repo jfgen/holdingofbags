@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useAuth } from "../lib/auth";
 import { groupsApi } from "../api/groups";
 import { itemsApi } from "../api/items";
 import { coinsApi } from "../api/coins";
@@ -15,6 +16,7 @@ import { Button } from "../components/ui/Button";
 type ViewMode = "board" | "list";
 
 export default function GroupPage() {
+  const { user } = useAuth();
   const { groupId } = useParams<{ groupId: string }>();
   const [group, setGroup] = useState<(Group & { members: Member[]; coins: Coins }) | null>(null);
   const [items, setItems] = useState<Item[]>([]);
@@ -75,7 +77,7 @@ export default function GroupPage() {
           <Link to="/groups" className="text-subtext text-sm hover:text-text">← All groups</Link>
           <h1 className="text-2xl font-semibold">{group.name}</h1>
         </div>
-        <InviteButton groupId={group.id} />
+        {user?.id === group.founderId && <InviteButton groupId={group.id} />}
       </header>
 
       <CoinsBar
