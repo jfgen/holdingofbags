@@ -13,7 +13,7 @@ const items: Item[] = [
 
 describe("ListView", () => {
   it("renders one row per item with location label", () => {
-    render(<ListView items={items} members={members} onMove={() => {}} onDelete={() => {}} />);
+    render(<ListView items={items} members={members} onMove={() => {}} onDelete={() => {}} onEdit={() => {}} />);
     expect(screen.getByText("Rope")).toBeInTheDocument();
     expect(screen.getByText("Hoard")).toBeInTheDocument();
     expect(screen.getByText(/Frodo/)).toBeInTheDocument();
@@ -21,7 +21,7 @@ describe("ListView", () => {
 
   it("sorts ascending by name when name header clicked", async () => {
     const user = userEvent.setup();
-    render(<ListView items={items} members={members} onMove={() => {}} onDelete={() => {}} />);
+    render(<ListView items={items} members={members} onMove={() => {}} onDelete={() => {}} onEdit={() => {}} />);
     await user.click(screen.getByRole("button", { name: /name/i }));
     const rows = screen.getAllByRole("row").slice(1).map((r) => r.textContent);
     expect(rows[0]).toContain("Rope");
@@ -30,7 +30,7 @@ describe("ListView", () => {
 
   it("toggles to descending on a second click of the same column", async () => {
     const user = userEvent.setup();
-    render(<ListView items={items} members={members} onMove={() => {}} onDelete={() => {}} />);
+    render(<ListView items={items} members={members} onMove={() => {}} onDelete={() => {}} onEdit={() => {}} />);
     await user.click(screen.getByRole("button", { name: /name/i }));
     await user.click(screen.getByRole("button", { name: /name/i }));
     const rows = screen.getAllByRole("row").slice(1).map((r) => r.textContent);
@@ -42,7 +42,7 @@ describe("ListView", () => {
     const user = userEvent.setup();
     const onMove = vi.fn();
     const onDelete = vi.fn();
-    render(<ListView items={items} members={members} onMove={onMove} onDelete={onDelete} />);
+    render(<ListView items={items} members={members} onMove={onMove} onDelete={onDelete} onEdit={() => {}} />);
     await user.click(screen.getAllByRole("button", { name: /^move$/i })[0]);
     expect(onMove).toHaveBeenCalledWith(items[0]);
     await user.click(screen.getAllByRole("button", { name: /^delete$/i })[1]);
